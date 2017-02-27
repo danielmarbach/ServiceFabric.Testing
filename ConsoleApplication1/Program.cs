@@ -17,10 +17,11 @@ namespace ConsoleApplication1
 
         private static async Task GetValue()
         {
+            var httpClient = new HttpClient();
+
             while (true)
             {
-                var httpClient = new HttpClient();
-                var content = await httpClient.GetAsync("http://localhost:19081/UnitTestApplication/TestRunner/Web");
+                var content = await httpClient.GetAsync("http://localhost:19081/TestApplication/TestRunner/Web");
                 var stringContent = await content.Content.ReadAsStringAsync();
                 if (!string.IsNullOrEmpty(stringContent))
                 {

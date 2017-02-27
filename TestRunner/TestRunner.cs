@@ -6,6 +6,7 @@ using System.Fabric.Description;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Data;
@@ -93,31 +94,57 @@ namespace TestRunner
                 // stream closed etc.
             }
         }
-        /// <summary>
-        /// This is the main entry point for your service replica.
-        /// This method executes when this replica of your service becomes primary and has write status.
-        /// </summary>
-        /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
+
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            // TODO: Replace the following sample code with your own logic 
-            //       or remove this RunAsync override if it's not needed in your service.
-
             var runner = new NUnitTestAssemblyRunner(new DefaultTestAssemblyBuilder());
             runner.Load(GetType().Assembly, new Dictionary<string, object>());
             runner.RunAsync(new CompositeListener(
                 new ContextAwareTestListener(StateManager),
-                new TeamCityEventListener(output)), TestFilter.Empty);
+                new TeamCityEventListener(new TextWriterConcurrenctQueueDecorator(output))), TestFilter.Empty);
 
-            while (true)
+            using (cancellationToken.Register(() => runner.StopRun(force: false)))
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                while (true)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                }
             }
         }
 
         ConcurrentQueue<string> output = new ConcurrentQueue<string>();
+
+        class TextWriterConcurrenctQueueDecorator : StringWriter
+        {
+            private ConcurrentQueue<string> output;
+
+            public TextWriterConcurrenctQueueDecorator(ConcurrentQueue<string> output)
+            {
+                this.output = output;
+            }
+
+            public override void WriteLine(string format, object arg0)
+            {
+                output.Enqueue(string.Format(format, arg0));
+            }
+
+            public override void WriteLine(string format, object arg0, object arg1)
+            {
+                output.Enqueue(string.Format(format, arg0, arg1));
+            }
+
+            public override void WriteLine(string format, object arg0, object arg1, object arg2)
+            {
+                output.Enqueue(string.Format(format, arg0, arg1, arg2));
+            }
+
+            public override void WriteLine(string format, params object[] arg)
+            {
+                output.Enqueue(string.Format(format, arg));
+            }
+        }
 
         class CompositeListener : ITestListener
         {

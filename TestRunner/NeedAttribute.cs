@@ -24,8 +24,7 @@ namespace TestRunner
                             where t.IsGenericType
                             let dependencyType = t.GetGenericArguments()[0]
                             let genericType = typeof(INeed<>).MakeGenericType(dependencyType)
-                            where
-                            genericType.IsAssignableFrom(t) && dependencyType.IsInterface
+                            where genericType.IsAssignableFrom(t)
                             select new TypeInfo {GenericType = genericType, DependencyType = dependencyType})
                         .Distinct()
                         .ToArray();

@@ -2,60 +2,17 @@
 using System.Collections.Generic;
 using System.Fabric;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
-using Microsoft.ServiceFabric.Services.Runtime;
 using NUnit.Framework;
-using NUnit.Framework.Api;
-using NUnit.Framework.Interfaces;
-using NUnit.Framework.Internal.Filters;
 
 namespace TestRunner
 {
-    //public abstract class StatefulServiceContextAwareBase
-    //{
-    //    public IReliableStateManager StateManager { get; set; } =
-    //        TestContext.CurrentContext.Test.Properties.Get("ReliableStateManager") as IReliableStateManager;
-    //}
-
-    //[TestFixture]
-    //public class SimpleTest : StatefulServiceContextAwareBase
-    //{
-    //    [SetUp]
-    //    public void SetUp()
-    //    {
-    //    }
-
-    //    [Test]
-    //    public async Task SomeTest()
-    //    {
-    //        var state = await StateManager.GetOrAddAsync<IReliableDictionary<string, string>>("state").ConfigureAwait(false);
-    //        Assert.Fail();
-    //    }
-
-    //    [TearDown]
-    //    public void TearDown()
-    //    {
-
-    //    }
-
-    //}
-
     [TestFixture]
-    public class AnotherTest : INeed<IReliableStateManager>
+    public class TestAccessingReliableStateManager : INeed<IReliableStateManager>
     {
         private IReliableStateManager stateManager;
-
-        [SetUp]
-        public void SetUp()
-        {
-            if (stateManager == null)
-            {
-                throw new AssertionException("");
-            }
-        }
 
         [Test]
         public async Task SomeTest()
@@ -74,85 +31,42 @@ namespace TestRunner
         {
             stateManager = dependency;
         }
+
     }
 
-    //[TestFixture]
-    //public class RepeatedTest : StatefulServiceContextAwareBase
-    //{
-    //    [SetUp]
-    //    public void SetUp()
-    //    {
-    //    }
+    [TestFixture]
+    public class TestAccessingStatefulContext : INeed<StatefulServiceContext>
+    {
+        private StatefulServiceContext statefulServiceContext;
 
-    //    [Test]
-    //    [Repeat(10)]
-    //    public async Task SomeTest()
-    //    {
-    //        var state = await StateManager.GetOrAddAsync<IReliableDictionary<string, string>>("state").ConfigureAwait(false);
-    //        await Task.Delay(100);
-    //        Assert.True(true);
-    //    }
+        [SetUp]
+        public void SetUp()
+        {
+        }
 
-    //    [TearDown]
-    //    public void TearDown()
-    //    {
+        [Test]
+        public void SomeTest()
+        {
+            Console.WriteLine(statefulServiceContext.ServiceName);
+            Console.WriteLine(statefulServiceContext.ReplicaId);
+            Assert.AreEqual("TestRunnerType", statefulServiceContext.ServiceTypeName);
+        }
 
-    //    }
+        public static IEnumerable<object> Input => Enumerable.Range(0, 100).Cast<object>();
 
-    //}
+        [TearDown]
+        public void TearDown()
+        {
 
-    //[TestFixture]
-    //public class Tomasz
-    //{
-    //    [SetUp]
-    //    public void SetUp()
-    //    {
-    //    }
+        }
 
-    //    [Test]
-    //    public void SomeTest()
-    //    {
-    //        Console.WriteLine("Foo");
-    //        Assert.True(true);
-    //        Console.WriteLine("Foo2");
-    //        //Assert.AreEqual(0, input % 3);
-    //    }
 
-    //    public static IEnumerable<object> Input => Enumerable.Range(0, 100).Cast<object>();
+        public void Need(StatefulServiceContext dependency)
+        {
+            statefulServiceContext = dependency;
+        }
 
-    //    [TearDown]
-    //    public void TearDown()
-    //    {
-
-    //    }
-
-    //}
-
-    //[TestFixture]
-    //public class TheoryTest2
-    //{
-    //    [SetUp]
-    //    public void SetUp()
-    //    {
-    //    }
-
-    //    [TestCase()]
-    //    [TestCaseSource("Input")]
-    //    public void SomeTest(int input)
-    //    {
-    //        Console.WriteLine(input);
-    //        Assert.AreEqual(0, input % 3);
-    //    }
-
-    //    public static IEnumerable<object> Input => Enumerable.Range(0, 3).Cast<object>();
-
-    //    [TearDown]
-    //    public void TearDown()
-    //    {
-
-    //    }
-
-    //}
+    }
 
     [TestFixture]
     public class TheoryTest

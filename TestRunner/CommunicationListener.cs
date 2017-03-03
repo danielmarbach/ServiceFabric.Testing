@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -17,35 +18,36 @@ namespace TestRunner
     {
         private NUnitTestAssemblyRunner runner;
 
-        public CommunicationListener(IServiceRemotingListener listener, TService statefulService)
+        public CommunicationListener(TService statefulService)
         {
-            serviceRemotingListener = listener;
             this.statefulService = statefulService;
         }
 
         public Task<string> OpenAsync(CancellationToken cancellationToken)
         {
-            runner = new NUnitTestAssemblyRunner(new DefaultTestAssemblyBuilder());
-            var settings = new Dictionary<string, object>
+            return Task.Run(() =>
+            {
+                runner = new NUnitTestAssemblyRunner(new DefaultTestAssemblyBuilder());
+                var settings = new Dictionary<string, object>
                 {
                     {"SynchronousEvents", true} // crucial to run listeners sync
                 };
-            var testSuite = runner.Load(GetType().Assembly, settings);
-            HashSet<string> testNameCache = new HashSet<string>();
-            CacheTests(testNameCache, testSuite);
-            cachedTestNames = Task.FromResult(testNameCache.ToArray());
+                var testSuite = runner.Load(GetType().Assembly, settings);
+                HashSet<string> testNameCache = new HashSet<string>();
+                CacheTests(testNameCache, testSuite);
+                cachedTestNames = Task.FromResult(testNameCache.ToArray());
 
-            return serviceRemotingListener.OpenAsync(cancellationToken);
+                return "";
+            });
         }
 
         public Task CloseAsync(CancellationToken cancellationToken)
         {
-            return serviceRemotingListener.CloseAsync(cancellationToken);
+            return Task.FromResult(0);
         }
 
         public void Abort()
         {
-            serviceRemotingListener.Abort();
         }
 
         public Task<string[]> Tests()
@@ -90,6 +92,5 @@ namespace TestRunner
 
         Task<string[]> cachedTestNames;
         TService statefulService;
-        private IServiceRemotingListener serviceRemotingListener;
     }
 }

@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommunicationListener.cs" />
+    <Compile Include="CompositeCommunicationListener.cs" />
     <Compile Include="CompositeListener.cs" />
     <Compile Include="INeed.cs" />
     <Compile Include="Listener.cs" />

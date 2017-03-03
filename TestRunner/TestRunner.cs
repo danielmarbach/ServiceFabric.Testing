@@ -24,8 +24,8 @@ namespace TestRunner
         {
             return new[] { new ServiceReplicaListener(context =>
             {
-                communicationListener = new CommunicationListener<TestRunner>(this.CreateServiceRemotingListener(context), this);
-                return communicationListener;
+                communicationListener = new CommunicationListener<TestRunner>(this);
+                return new CompositeCommunicationListener(communicationListener, this.CreateServiceRemotingListener(context));
             }) };
         }
 

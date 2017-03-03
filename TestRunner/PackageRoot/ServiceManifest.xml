@@ -23,8 +23,6 @@
 
   <Resources>
     <Endpoints>
-      <Endpoint Name="Web" Protocol="http" UriScheme="http" Port="8089" />
-
       <Endpoint Name="ReplicatorEndpoint" />
     </Endpoints>
   </Resources>

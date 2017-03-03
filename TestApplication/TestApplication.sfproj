@@ -37,4 +37,7 @@
   </PropertyGroup>
   <Import Project="$(ApplicationProjectTargetsPath)" Condition="Exists('$(ApplicationProjectTargetsPath)')" />
   <Import Project="..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.4.0\build\Microsoft.VisualStudio.Azure.Fabric.Application.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.4.0\build\Microsoft.VisualStudio.Azure.Fabric.Application.targets')" />
+  <Target Name="ReleaseAfterBuild" AfterTargets="AfterBuild">
+    <MSBuild Projects="$(ProjectPath)" Targets="Package" />
+  </Target>
 </Project>

@@ -1,13 +1,14 @@
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.ServiceFabric.Services.Communication.Runtime;
-
 namespace TestRunner
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Microsoft.ServiceFabric.Services.Communication.Runtime;
+
+    /// <summary>
+    /// Orchestrates multiple communication listener.
+    /// </summary>
     class CompositeCommunicationListener : ICommunicationListener
     {
-        private ICommunicationListener[] listeners;
-
         public CompositeCommunicationListener(params ICommunicationListener[] listeners)
         {
             this.listeners = listeners;
@@ -38,5 +39,7 @@ namespace TestRunner
                 listener.Abort();
             }
         }
+
+        ICommunicationListener[] listeners;
     }
 }

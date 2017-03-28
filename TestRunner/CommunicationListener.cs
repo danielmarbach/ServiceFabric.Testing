@@ -1,23 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.ServiceFabric.Services.Communication.Runtime;
-using Microsoft.ServiceFabric.Services.Remoting.Runtime;
-using Microsoft.ServiceFabric.Services.Runtime;
-using NUnit.Framework.Api;
-using NUnit.Framework.Interfaces;
-using NUnit.Framework.Internal.Filters;
-using TestRunner.Interfaces;
-
 namespace TestRunner
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Microsoft.ServiceFabric.Services.Communication.Runtime;
+    using Microsoft.ServiceFabric.Services.Runtime;
+    using NUnit.Framework.Api;
+    using NUnit.Framework.Interfaces;
+    using NUnit.Framework.Internal.Filters;
+
+    /// <summary>
+    /// The communication listener reflects the assembly containing TService for tests and loads them into an
+    /// NUnitTestAssemblyRunner.
+    /// It also acts as a gateway to the hosted tests. The listener is stateful and there is a coupling between the Run method
+    /// and the Tests method.
+    /// Only test names that are returned from the Tests method can be passed into the Run method.
+    /// </summary>
     class CommunicationListener<TService> : ICommunicationListener
         where TService : StatefulService
     {
-        private NUnitTestAssemblyRunner runner;
-
         public CommunicationListener(TService statefulService)
         {
             this.statefulService = statefulService;
@@ -32,8 +34,8 @@ namespace TestRunner
                 {
                     {"SynchronousEvents", true} // crucial to run listeners sync
                 };
-                var testSuite = runner.Load(GetType().Assembly, settings);
-                HashSet<string> testNameCache = new HashSet<string>();
+                var testSuite = runner.Load(typeof(TService).Assembly, settings);
+                var testNameCache = new HashSet<string>();
                 CacheTests(testNameCache, testSuite);
                 cachedTestNames = Task.FromResult(testNameCache.ToArray());
 
@@ -43,11 +45,13 @@ namespace TestRunner
 
         public Task CloseAsync(CancellationToken cancellationToken)
         {
-            return Task.FromResult(0);
+            return Task.Run(() => runner.StopRun(true));
         }
 
         public void Abort()
         {
+            // fire & forget
+            CloseAsync(CancellationToken.None);
         }
 
         public Task<string[]> Tests()
@@ -55,19 +59,20 @@ namespace TestRunner
             return cachedTestNames;
         }
 
+
         public Task<Result> Run(string testName)
         {
             return Task.Run(() =>
             {
-                var resultListener = new Listener();
+                var resultListener = new ResultListener();
                 var provider = new StatefulServiceProviderListener<TService>(statefulService);
-                var compositeListener = new CompositeListener(provider, resultListener);
+                var eventSourceTestListener = new EventSourceTestListener();
+                var compositeListener = new CompositeListener(provider, resultListener, eventSourceTestListener);
 
                 var fullNameFilter = new FullNameFilter(testName);
                 runner.Run(compositeListener, fullNameFilter);
 
-                var result = new Result(resultListener.Output, resultListener.Exception);
-                return result;
+                return resultListener.Result;
             });
         }
 
@@ -89,6 +94,8 @@ namespace TestRunner
 
             testNameCache.Add(test.FullName);
         }
+
+        NUnitTestAssemblyRunner runner;
 
         Task<string[]> cachedTestNames;
         TService statefulService;

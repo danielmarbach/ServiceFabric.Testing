@@ -1,11 +1,12 @@
-﻿using NUnit.Framework.Interfaces;
-
-namespace TestRunner
+﻿namespace TestRunner
 {
+    using NUnit.Framework.Interfaces;
+
+    /// <summary>
+    /// Orchestrates multiple test listeners
+    /// </summary>
     class CompositeListener : ITestListener
     {
-        private ITestListener[] testListeners;
-
         public CompositeListener(params ITestListener[] listeners)
         {
             testListeners = listeners;
@@ -34,5 +35,7 @@ namespace TestRunner
                 testListener.TestOutput(output);
             }
         }
+
+        ITestListener[] testListeners;
     }
 }

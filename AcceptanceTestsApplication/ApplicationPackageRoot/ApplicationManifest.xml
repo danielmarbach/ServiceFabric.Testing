@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="AcceptanceTestsType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="AcceptanceTests_MinReplicaSetSize" DefaultValue="1" />
+    <Parameter Name="AcceptanceTests_PartitionCount" DefaultValue="1" />
+    <Parameter Name="AcceptanceTests_TargetReplicaSetSize" DefaultValue="1" />
+    <Parameter Name="AcceptanceTests_AzureServiceBus.ConnectionString" DefaultValue="" />
+  </Parameters>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="AcceptanceTestsPkg" ServiceManifestVersion="1.0.0" />
+    <EnvironmentOverrides CodePackageRef="Code">
+      <EnvironmentVariable Name="AzureServiceBus.ConnectionString" Value="[AcceptanceTests_AzureServiceBus.ConnectionString]" />
+      <EnvironmentVariable Name="AzureServiceBusTransport.ConnectionString" Value="[AcceptanceTests_AzureServiceBus.ConnectionString]" />
+    </EnvironmentOverrides>
+  </ServiceManifestImport>
+  <DefaultServices>
+    <Service Name="Tests">
+      <StatefulService ServiceTypeName="TestsType" TargetReplicaSetSize="[AcceptanceTests_TargetReplicaSetSize]" MinReplicaSetSize="[AcceptanceTests_MinReplicaSetSize]">
+        <SingletonPartition />
+      </StatefulService>
+    </Service>
+  </DefaultServices>
+</ApplicationManifest>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="TestsType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="Tests_MinReplicaSetSize" DefaultValue="1" />
+    <Parameter Name="Tests_PartitionCount" DefaultValue="1" />
+    <Parameter Name="Tests_TargetReplicaSetSize" DefaultValue="1" />
+  </Parameters>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="TestsPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <DefaultServices>
+    <Service Name="Tests">
+      <StatefulService ServiceTypeName="TestsType" TargetReplicaSetSize="[Tests_TargetReplicaSetSize]" MinReplicaSetSize="[Tests_MinReplicaSetSize]">
+        <SingletonPartition />
+      </StatefulService>
+    </Service>
+  </DefaultServices>
+</ApplicationManifest>

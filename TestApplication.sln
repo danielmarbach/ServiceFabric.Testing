@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{F953E221-368B-4850-9AE2-E2F7A012A32D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner", "TestRunner\TestRunner.csproj", "{2A4EE72F-E17F-4858-ADAA-34FB47068F5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner.NUnit", "TestRunner\TestRunner.NUnit.csproj", "{2A4EE72F-E17F-4858-ADAA-34FB47068F5C}"
 EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "TestsApplication", "TestsApplication\TestsApplication.sfproj", "{6722AAC7-F141-4492-85BB-BE0C82EF7F99}"
 EndProject
@@ -52,5 +52,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05214471-4345-4A81-BC07-9BA53E80A16C}
 	EndGlobalSection
 EndGlobal

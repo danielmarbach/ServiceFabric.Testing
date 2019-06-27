@@ -1,9 +1,9 @@
-namespace TestRunner
-{
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.ServiceFabric.Services.Communication.Runtime;
 
+namespace TestRunner.NUnit
+{
     /// <summary>
     /// Orchestrates multiple communication listener.
     /// </summary>

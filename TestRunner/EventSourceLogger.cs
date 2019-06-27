@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.Tracing;
 using System.Threading.Tasks;
 
-namespace TestRunner
+namespace TestRunner.NUnit
 {
     [EventSource(Name = "TestRunner")]
     sealed class EventSourceLogger : EventSource

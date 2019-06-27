@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using NUnit.Framework;
 
-namespace TestRunner
+namespace TestRunner.NUnit
 {
     /// <summary>
     /// Allows to marshal test results back to the client. For compatibility all exception types that need to be marshalled

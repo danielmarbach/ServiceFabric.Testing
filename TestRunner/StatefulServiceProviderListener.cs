@@ -1,8 +1,8 @@
-namespace TestRunner
-{
-    using Microsoft.ServiceFabric.Services.Runtime;
-    using NUnit.Framework.Interfaces;
+using Microsoft.ServiceFabric.Services.Runtime;
+using NUnit.Framework.Interfaces;
 
+namespace TestRunner.NUnit
+{
     /// <summary>
     /// Provides the service into the TestContext.
     /// </summary>
@@ -25,6 +25,10 @@ namespace TestRunner
         }
 
         public void TestOutput(TestOutput output)
+        {
+        }
+
+        public void SendMessage(TestMessage message)
         {
         }
 

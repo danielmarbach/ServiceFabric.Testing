@@ -1,14 +1,14 @@
-﻿namespace TestRunner
-{
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using Microsoft.ServiceFabric.Services.Runtime;
-    using NUnit.Framework;
-    using NUnit.Framework.Interfaces;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Microsoft.ServiceFabric.Services.Runtime;
+using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 
+namespace TestRunner.NUnit
+{
     /// <summary>
     /// This attribute is an extensibility point of type ITestAction that is applied to the <see cref="INeed{TDependency}" />
     /// interface. The implementation does the following:
@@ -53,8 +53,7 @@
 
                 foreach (var type in typeInfo)
                 {
-                    PropertyInfo property;
-                    if (properties.TryGetValue(type.DependencyType, out property))
+                    if (properties.TryGetValue(type.DependencyType, out var property))
                     {
                         var methodInfo = testFixtureType.GetInterfaceMap(type.GenericType).TargetMethods.FirstOrDefault();
                         if (methodInfo != null)

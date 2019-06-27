@@ -1,12 +1,12 @@
-namespace TestRunner
-{
-    using System.Collections.Generic;
-    using System.Fabric;
-    using System.Threading.Tasks;
-    using Microsoft.ServiceFabric.Services.Communication.Runtime;
-    using Microsoft.ServiceFabric.Services.Remoting.Runtime;
-    using Microsoft.ServiceFabric.Services.Runtime;
+using System.Collections.Generic;
+using System.Fabric;
+using System.Threading.Tasks;
+using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
+using Microsoft.ServiceFabric.Services.Runtime;
 
+namespace TestRunner.NUnit
+{
     public abstract class AbstractTestRunner<TSelf> : StatefulService, ITestRunner
         where TSelf : StatefulService
     {

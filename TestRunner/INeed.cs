@@ -1,4 +1,4 @@
-﻿namespace TestRunner
+﻿namespace TestRunner.NUnit
 {
     /// <summary>
     /// Allows to inject a property of type TDependency that is declared on the stateful service hierarchy.

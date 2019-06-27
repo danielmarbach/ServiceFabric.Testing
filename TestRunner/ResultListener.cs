@@ -1,9 +1,9 @@
-﻿namespace TestRunner
-{
-    using System;
-    using NUnit.Framework;
-    using NUnit.Framework.Interfaces;
+﻿using System;
+using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 
+namespace TestRunner.NUnit
+{
     class ResultListener : ITestListener
     {
         public Result Result { get; private set; }
@@ -44,6 +44,10 @@
         }
 
         public void TestOutput(TestOutput output)
+        {
+        }
+
+        public void SendMessage(TestMessage message)
         {
         }
     }

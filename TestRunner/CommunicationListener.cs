@@ -1,15 +1,14 @@
-namespace TestRunner
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.ServiceFabric.Services.Communication.Runtime;
-    using Microsoft.ServiceFabric.Services.Runtime;
-    using NUnit.Framework.Api;
-    using NUnit.Framework.Interfaces;
-    using NUnit.Framework.Internal.Filters;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Runtime;
+using NUnit.Framework.Api;
+using NUnit.Framework.Interfaces;
 
+namespace TestRunner.NUnit
+{
     /// <summary>
     /// The communication listener reflects the assembly containing TService for tests and loads them into an
     /// NUnitTestAssemblyRunner.

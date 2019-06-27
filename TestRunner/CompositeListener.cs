@@ -1,7 +1,7 @@
-﻿namespace TestRunner
-{
-    using NUnit.Framework.Interfaces;
+﻿using NUnit.Framework.Interfaces;
 
+namespace TestRunner.NUnit
+{
     /// <summary>
     /// Orchestrates multiple test listeners
     /// </summary>
@@ -33,6 +33,14 @@
             foreach (var testListener in testListeners)
             {
                 testListener.TestOutput(output);
+            }
+        }
+
+        public void SendMessage(TestMessage message)
+        {
+            foreach(var testListener in testListeners)
+            {
+                testListener.SendMessage(message);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework.Interfaces;
 
-namespace TestRunner
+namespace TestRunner.NUnit
 {
     public class EventSourceTestListener : ITestListener
     {
@@ -20,6 +20,10 @@ namespace TestRunner
         }
 
         public void TestOutput(TestOutput output)
+        {
+        }
+
+        public void SendMessage(TestMessage message)
         {
         }
     }

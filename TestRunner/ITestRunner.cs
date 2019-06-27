@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Remoting;
 
-namespace TestRunner
+namespace TestRunner.NUnit
 {
     public interface ITestRunner : IService
     {
